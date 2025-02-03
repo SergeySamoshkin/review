@@ -5,7 +5,13 @@ import {User} from "../user/entities/user.entity";
 export class AccessService {
 
   async checkAccess(user: User) {
-      return user.hasAccess;
+      const access = await this.tx
+          .selectFrom('access')
+          .select('*')
+          .where('user', '=', user.id)
+          .execute();
+
+      return { hasAccess: access.hasAccess }
   }
 
 }

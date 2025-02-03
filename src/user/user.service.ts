@@ -13,7 +13,7 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return { hasAccess : true };
+    return { hasAccess : true, id: 1 };
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

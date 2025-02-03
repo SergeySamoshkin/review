@@ -1,7 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
 import {UserService} from "../user/user.service";
 import {AccessService} from "../access/access.service";
 
@@ -12,32 +10,21 @@ export class TasksController {
       private readonly userService: UserService,
       private readonly accessService: AccessService) {}
 
-  @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
-  }
-
   @Get('/')
-  findAll(@Param('id') id: number) {
+  getTasks(@Param('id') id: number) {
       let user = this.userService.findOne(id);
 
       this.accessService.checkAccess(user);
 
-      return this.tasksService.findAll();
+      return this.tasksService.getTasks();
   }
 
   @Get(':getId')
-  findOne(@Param('id') id: string) {
-    return this.tasksService.findOne(+id);
-  }
+  findOne(@Param('id') id: number) {
+    let user = this.userService.findOne(id);
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
-    return this.tasksService.update(+id, updateTaskDto);
-  }
+    this.accessService.checkAccess(user);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tasksService.remove(+id);
+    return this.tasksService.getTask(+id);
   }
 }
