@@ -1,7 +1,8 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {Controller, Get, Param, Patch} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import {UserService} from "../user/user.service";
 import {AccessService} from "../access/access.service";
+import {Task} from "./entities/task.entity";
 
 @Controller('tasks')
 export class TasksController {
@@ -19,12 +20,17 @@ export class TasksController {
       return this.tasksService.getTasks();
   }
 
-  @Get(':getId')
-  findOne(@Param('id') id: number) {
-    let user = this.userService.findOne(id);
+  @Get(':id')
+  getTask(@Param('id') id: number) {
+      let user = this.userService.findOne(id);
 
-    this.accessService.checkAccess(user);
+      this.accessService.checkAccess(user);
 
-    return this.tasksService.getTask(+id);
+      return this.tasksService.getTask(+id);
+  }
+
+  @Patch('/update/:id')
+  async updateTask(id: number, data: any): Promise<Task> {
+      return this.tasksService.update(id, data);
   }
 }

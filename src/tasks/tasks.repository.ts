@@ -2,7 +2,7 @@ import {Injectable} from "@nestjs/common";
 import {Task} from "./entities/task.entity";
 
 @Injectable()
-export class PresetRepository {
+export class TaskRepository {
     protected readonly table = 'tasks';
 
     async find(id: number): Promise<Task> {
@@ -17,6 +17,15 @@ export class PresetRepository {
             .selectFrom('task')
             .selectAll('task')
             .where('id', '=', id)
+            .execute();
+    }
+
+    async update(id: number, data: any): Promise<Task> {
+        return this.tx
+            .updateTable('task')
+            .set({...data})
+            .where('id', '=', id)
+            .returningAll()
             .execute();
     }
 }
