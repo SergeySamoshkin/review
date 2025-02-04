@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import {TaskRepository} from "./tasks.repository";
 import {Task} from "./entities/task.entity";
+import {txHost} from "../types/tx-host";
 
 @Injectable()
 export class TasksService {
 
-    constructor(private readonly taskRepository: TaskRepository) {
-    }
+  constructor(private readonly taskRepository: TaskRepository, private readonly tx: txHost) {}
 
   getTasks() {
       return this.tx

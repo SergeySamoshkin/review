@@ -1,9 +1,13 @@
 import {Injectable} from "@nestjs/common";
 import {Task} from "./entities/task.entity";
+import {txHost} from "../types/tx-host";
 
 @Injectable()
 export class TaskRepository {
     protected readonly table = 'tasks';
+
+    constructor(private readonly tx: txHost) {
+    }
 
     async find(id: number): Promise<Task> {
         return this.tx
